@@ -1,0 +1,1 @@
+C:\Users\nguye\OneDrive\Máy tính\TicTacToe-Plugin\TicTacToe\TicTacToe.csproj;x64
