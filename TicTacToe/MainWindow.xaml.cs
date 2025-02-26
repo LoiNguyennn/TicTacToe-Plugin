@@ -11,14 +11,16 @@ namespace TicTacToe
         private string computerPlayer = "O";
         private string[,] board = new string[3, 3];
         private bool gameEnded = false;
-        private bool isVsComputer = true; // Mặc định chơi với máy
+        private bool isVsComputer = true;
         private IComputerStrategy computerStrategy;
+        private MediumStrategy mediumStrategy;
 
         public MainWindow()
         {
             Debug.WriteLine("Starting MainWindow constructor");
             this.InitializeComponent();
-            computerStrategy = new EasyStrategy(); // Khởi tạo mặc định
+            computerStrategy = new EasyStrategy();
+            mediumStrategy = new MediumStrategy();
             Debug.WriteLine("MainWindow constructor finished");
         }
 
@@ -26,7 +28,7 @@ namespace TicTacToe
         {
             Debug.WriteLine("Grid Loaded");
             InitializeBoard();
-            Debug.WriteLine("InitializeBoard finished");
+            UpdateStatusText();
         }
 
         private void InitializeBoard()
@@ -54,10 +56,9 @@ namespace TicTacToe
             }
 
             currentPlayer = "X";
-            StatusText.Text = "Player X's Turn";
             gameEnded = false;
+            UpdateStatusText();
 
-            // Nếu máy đi trước (O), gọi ComputerMove ngay
             if (isVsComputer && currentPlayer == computerPlayer)
             {
                 ComputerMove();
@@ -84,17 +85,21 @@ namespace TicTacToe
                 {
                     StatusText.Text = $"Player {currentPlayer} Wins!";
                     gameEnded = true;
+                    RecordGameResult(currentPlayer == "X");
                     DisableAllButtons();
+                    UpdateStatusText();
                 }
                 else if (IsBoardFull())
                 {
                     StatusText.Text = "It's a Draw!";
                     gameEnded = true;
+                    RecordGameResult(false);
+                    UpdateStatusText();
                 }
                 else
                 {
                     currentPlayer = currentPlayer == "X" ? "O" : "X";
-                    StatusText.Text = $"Player {currentPlayer}'s Turn";
+                    UpdateStatusText();
 
                     if (isVsComputer && currentPlayer == computerPlayer && !gameEnded)
                     {
@@ -118,19 +123,48 @@ namespace TicTacToe
             {
                 StatusText.Text = $"Player {computerPlayer} Wins!";
                 gameEnded = true;
+                RecordGameResult(false);
                 DisableAllButtons();
+                UpdateStatusText();
             }
             else if (IsBoardFull())
             {
                 StatusText.Text = "It's a Draw!";
                 gameEnded = true;
+                RecordGameResult(false);
+                UpdateStatusText();
             }
             else
             {
                 currentPlayer = "X";
-                StatusText.Text = "Player X's Turn";
+                UpdateStatusText();
             }
             Debug.WriteLine("Computer move finished");
+        }
+
+        private void RecordGameResult(bool playerWon)
+        {
+            if (computerStrategy is MediumStrategy medium)
+            {
+                medium.RecordGameResult(playerWon);
+                Debug.WriteLine($"Game recorded: Player won = {playerWon}, Win rate = {medium.GetPlayerWinRate():P}");
+            }
+        }
+
+        private void UpdateStatusText()
+        {
+            string baseStatus = gameEnded ? StatusText.Text : $"Player {currentPlayer}'s Turn";
+            string strategyInfo = "";
+            string winRateInfo = "";
+
+            if (isVsComputer && computerStrategy is MediumStrategy medium)
+            {
+                double winRate = medium.GetPlayerWinRate();
+                winRateInfo = $"Player Win Rate: {winRate:P0}";
+                strategyInfo = $"AI Strategy: {(winRate > 0.49 ? "Hard" : "Easy")}";
+            }
+
+            StatusText.Text = $"{baseStatus} | {winRateInfo} | {strategyInfo}".TrimEnd(' ', '|');
         }
 
         private bool CheckWinner(int row, int col)
@@ -166,7 +200,7 @@ namespace TicTacToe
         private void NewGame_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("New Game clicked");
-            isVsComputer = true; // Đảm bảo luôn chơi với máy
+            isVsComputer = true;
             InitializeBoard();
         }
 
@@ -181,14 +215,25 @@ namespace TicTacToe
                         computerStrategy = new EasyStrategy();
                         break;
                     case "medium":
-                        computerStrategy = new MediumStrategy();
+                        computerStrategy = mediumStrategy;
                         break;
                     case "hard":
                         computerStrategy = new HardStrategy();
                         break;
                 }
-                InitializeBoard(); // Reset bảng khi đổi độ khó
+                InitializeBoard();
             }
+        }
+
+        private void ResetStats_Click(object sender, RoutedEventArgs e)
+        {
+            if (mediumStrategy != null)
+            {
+                mediumStrategy.ResetStats();
+                Debug.WriteLine("Stats reset");
+                UpdateStatusText();
+            }
+            InitializeBoard();
         }
     }
 }

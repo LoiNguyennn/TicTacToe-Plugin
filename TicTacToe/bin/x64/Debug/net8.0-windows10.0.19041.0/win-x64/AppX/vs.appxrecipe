@@ -30,7 +30,7 @@
     <AppXManifest Include="C:\Users\nguye\OneDrive\Máy tính\TicTacToe-Plugin\TicTacToe\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2025-02-25T07:54:18.713</Modified>
+      <Modified>2025-02-26T07:56:45.668</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\nguye\OneDrive\Máy tính\TicTacToe-Plugin\TicTacToe\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\TicTacToe.dll">
       <PackagePath>TicTacToe.dll</PackagePath>
-      <Modified>2025-02-25T07:54:18.070</Modified>
+      <Modified>2025-02-26T07:56:45.340</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\nguye\OneDrive\Máy tính\TicTacToe-Plugin\TicTacToe\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>TicTacToe.exe</PackagePath>
-      <Modified>2025-02-25T07:54:18.081</Modified>
+      <Modified>2025-02-26T07:56:45.346</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\nguye\.nuget\packages\microsoft.web.webview2\1.0.2651.64\runtimes\win-x64\native\WebView2Loader.dll">
       <PackagePath>runtimes\win-x64\native\WebView2Loader.dll</PackagePath>
